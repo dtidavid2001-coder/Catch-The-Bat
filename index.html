@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Atrapa al Murciélago 🦇</title>
+
+<style>
+/* =========================
+   COLORES DE LA PÁGINA
+   ========================= */
+
+:root {
+    --rosa: #ff4fb3;
+    --fucsia: #ff1493;
+    --rosa-claro: #ff8dce;
+    --negro: #090009;
+    --morado: #8e1678;
+    --blanco: #fff7fc;
+}
+
+
+/* =========================
+   CONFIGURACIÓN GENERAL
+   ========================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    background: var(--negro);
+    color: var(--blanco);
+    font-family: Arial, sans-serif;
+
+    background:
+        radial-gradient(
+            circle at 20% 15%,
+            #ff149355 0 2px,
+            transparent 3px
+        ),
+
+        radial-gradient(
+            circle at 80% 25%,
+            #ff4fb344 0 2px,
+            transparent 3px
+        ),
+
+        linear-gradient(
+            135deg,
+            #080008,
+            #250018 48%,
+            #090009
+        );
+}
+
+
+/* =========================
+   PANTALLAS
+   ========================= */
+
+.screen {
+    position: absolute;
+
+    inset: 0;
+
+    display: grid;
+
+    place-items: center;
+
+    padding: 24px;
+
+    transition:
+        opacity 0.5s,
+        transform 0.5s;
+}
+
+.hidden {
+    opacity: 0 !important;
+
+    pointer-events: none;
+
+    transform: scale(0.97);
+}
+
+
+/* =========================
+   TARJETA PRINCIPAL
+   ========================= */
+
+.card {
+
+    width: min(720px, 94vw);
+
+    text-align: center;
+
+    padding: 42px 28px;
+
+    border: 2px solid #ff4fb388;
+
+    border-radius: 28px;
+
+    background: #12000fdd;
+
+    box-shadow:
+        0 0 30px #ff149355,
+        inset 0 0 30px #ff149322;
+
+    position: relative;
+}
+
+
+/* =========================
+   MURCIÉLAGO PRINCIPAL
+   ========================= */
+
+.bat-logo {
+
+    font-size: 72px;
+
+    filter:
+        drop-shadow(
+            0 0 12px var(--rosa)
+        );
+
+    animation:
+        flotar 2s ease-in-out infinite;
+}
+
+
+/* =========================
+   TÍTULO
+   ========================= */
+
+h1 {
+
+    font-family:
+        Georgia,
+        serif;
+
+    font-size:
+        clamp(42px, 9vw, 76px);
+
+    color:
+        var(--rosa-claro);
+
+    text-shadow:
+        3px 3px 0 #6b0751,
+        0 0 18px var(--fucsia);
+
+    margin:
+        10px 0;
+}
+
+
+/* =========================
+   TEXTO
+   ========================= */
+
+.subtitle {
+
+    font-size:
+        clamp(17px, 4vw, 23px);
+
+    font-weight:
+        bold;
+
+    line-height:
+        1.45;
+}
+
+
+/* =========================
+   BOTONES
+   ========================= */
+
+button {
+
+    border: 0;
+
+    border-radius: 999px;
+
+    padding:
+        16px 28px;
+
+    margin-top:
+        22px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ff1493,
+            #ff5fc3
+        );
+
+    color:
+        white;
+
+    font-weight:
+        bold;
+
+    font-size:
+        15px;
+
+    cursor:
+        pointer;
+
+    box-shadow:
+        0 0 18px #ff1493aa,
+        0 5px 0 #87004d;
+
+    transition:
+        0.15s;
+}
+
+button:hover {
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 0 28px #ff1493dd,
+        0 7px 0 #87004d;
+}
+
+
+/* =========================
+   CUENTA REGRESIVA
+   ========================= */
+
+#count {
+
+    font-size:
+        clamp(54px, 15vw, 120px);
+
+    color:
+        var(--rosa);
+
+    text-shadow:
+        0 0 25px var(--fucsia);
+
+    font-weight:
+        bold;
+}
+
+
+/* =========================
+   ¡VAMOS!
+   ========================= */
+
+#go {
+
+    font-family:
+        Georgia,
+        serif;
+
+    font-size:
+        clamp(80px, 20vw, 170px);
+
+    color:
+        white;
+
+    text-shadow:
+        0 0 15px var(--fucsia),
+        6px 6px #9b0869;
+
+    animation:
+        aparecer 0.55s ease;
+}
+
+
+/* =========================
+   JUEGO
+   ========================= */
+
+#game {
+
+    cursor:
+        crosshair;
+}
+
+
+/* Texto superior */
+
+#hud {
+
+    position:
+        fixed;
+
+    top:
+        18px;
+
+    left:
+        50%;
+
+    transform:
+        translateX(-50%);
+
+    z-index:
+        10;
+
+    background:
+        #12000fd9;
+
+    border:
+        1px solid #ff4fb388;
+
+    border-radius:
+        999px;
+
+    padding:
+        10px 18px;
+
+    font-size:
+        11px;
+
+    font-weight:
+        bold;
+
+    box-shadow:
+        0 0 16px #ff149355;
+}
+
+
+/* =========================
+   MURCIÉLAGO QUE ATRAPAS
+   ========================= */
+
+#bat {
+
+    position:
+        fixed;
+
+    left:
+        50%;
+
+    top:
+        50%;
+
+    font-size:
+        64px;
+
+    z-index:
+        9;
+
+    user-select:
+        none;
+
+    touch-action:
+        manipulation;
+
+    filter:
+        drop-shadow(
+            0 0 8px #ff1493
+        );
+
+    cursor:
+        pointer;
+
+    transition:
+        left 0.25s,
+        top 0.25s;
+}
+
+
+/* =========================
+   QR
+   ========================= */
+
+.qrbox {
+
+    width:
+        min(310px, 72vw);
+
+    aspect-ratio:
+        1;
+
+    margin:
+        20px auto 8px;
+
+    border:
+        3px dashed var(--rosa);
+
+    border-radius:
+        20px;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    background:
+        white;
+
+    padding:
+        12px;
+
+    box-shadow:
+        0 0 25px #ff149388;
+}
+
+
+/* AQUÍ APARECERÁ TU QR */
+
+.qrbox img {
+
+    width:
+        100%;
+
+    height:
+        100%;
+
+    object-fit:
+        contain;
+}
+
+
+/* =========================
+   CORAZONES
+   ========================= */
+
+.heart {
+
+    position:
+        fixed;
+
+    color:
+        var(--rosa);
+
+    opacity:
+        0.5;
+
+    animation:
+        subir linear infinite;
+
+    z-index:
+        -1;
+}
+
+
+/* =========================
+   ANIMACIONES
+   ========================= */
+
+@keyframes flotar {
+
+    50% {
+        transform:
+            translateY(-9px)
+            rotate(-3deg);
+    }
+
+}
+
+
+@keyframes aparecer {
+
+    0% {
+        transform:
+            scale(0.4);
+    }
+
+    70% {
+        transform:
+            scale(1.1);
+    }
+
+    100% {
+        transform:
+            scale(1);
+    }
+
+}
+
+
+@keyframes subir {
+
+    from {
+
+        transform:
+            translateY(110vh)
+            rotate(0);
+
+        opacity:
+            0;
+    }
+
+    15% {
+
+        opacity:
+            0.55;
+    }
+
+    to {
+
+        transform:
+            translateY(-15vh)
+            rotate(360deg);
+
+        opacity:
+            0;
+    }
+
+}
+
+
+/* =========================
+   CELULARES
+   ========================= */
+
+@media (max-width: 500px) {
+
+    .card {
+
+        padding:
+            32px 18px;
+    }
+
+    .bat-logo {
+
+        font-size:
+            58px;
+    }
+
+    #bat {
+
+        font-size:
+            52px;
+    }
+
+    button {
+
+        font-size:
+            12px;
+
+        padding:
+            15px 20px;
+    }
+
+}
+</style>
+</head>
+
+
+<body>
+
+
+<!-- ==================================
+     CORAZONES DECORATIVOS
+     ================================== -->
+
+<div id="hearts"></div>
+
+
+<!-- ==================================
+     PANTALLA INICIAL
+     ================================== -->
+
+<section
+    id="start"
+    class="screen"
+>
+
+    <div class="card">
+
+        <div class="bat-logo">
+            🦇
+        </div>
+
+        <h1>
+            Atrapa al murciélago
+        </h1>
+
+        <p class="subtitle">
+
+            El murciélago vuela por toda
+            la pantalla...
+
+            <br>
+
+            ¿Estás listo/a?
+
+        </p>
+
+        <button id="startBtn">
+
+            ♡ ESTOY LISTO/A ♡
+
+        </button>
+
+    </div>
+
+</section>
+
+
+
+<!-- ==================================
+     CUENTA REGRESIVA
+     ================================== -->
+
+<section
+    id="countdown"
+    class="screen hidden"
+>
+
+    <div class="card">
+
+        <div id="count">
+            3
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ==================================
+     ¡VAMOS!
+     ================================== -->
+
+<section
+    id="vamos"
+    class="screen hidden"
+>
+
+    <div id="go">
+
+        ¡VAMOS!
+
+    </div>
+
+</section>
+
+
+
+<!-- ==================================
+     JUEGO
+     ================================== -->
+
+<section
+    id="game"
+    class="screen hidden"
+>
+
+    <div id="hud">
+
+        ATRÁPALO 🦇
+
+        ·
+
+        <span id="tries">
+            0
+        </span>
+
+        TOQUES
+
+    </div>
+
+
+    <!--
+    ESTE ES EL MURCIÉLAGO
+    QUE EL INVITADO DEBE TOCAR
+    -->
+
+    <div
+        id="bat"
+        role="button"
+        aria-label="Atrapar murciélago"
+    >
+
+        🦇
+
+    </div>
+
+</section>
+
+
+
+<!-- ==================================
+     PANTALLA FINAL / QR
+     ================================== -->
+
+<section
+    id="win"
+    class="screen hidden"
+>
+
+    <div class="card">
+
+        <div class="bat-logo">
+
+            🦇💗
+
+        </div>
+
+
+        <h1>
+
+            ¡LO ATRAPASTE!
+
+        </h1>
+
+
+        <p class="subtitle">
+
+            Tu recompensa está aquí... ✨
+
+        </p>
+
+
+        <!-- ==================================
+             AQUÍ VA TU QR
+             ================================== -->
+
+        <div class="qrbox">
+
+            <img
+                id="qrImage"
+                src="qr.png"
+                alt="Código QR"
+            >
+
+        </div>
+
+
+        <p
+            style="
+            font-size:12px;
+            color:#ff8dce;
+            font-weight:bold;
+            "
+        >
+
+            ESCANÉAME ♡
+
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<script>
+
+/* ==================================
+   CAMBIAR DE PANTALLA
+   ================================== */
+
+const pantallas = [
+    "start",
+    "countdown",
+    "vamos",
+    "game",
+    "win"
+];
+
+
+function mostrarPantalla(nombre) {
+
+    pantallas.forEach(
+        pantalla => {
+
+            document
+                .getElementById(pantalla)
+                .classList
+                .toggle(
+                    "hidden",
+                    pantalla !== nombre
+                );
+
+        }
+    );
+
+}
+
+
+/* ==================================
+   CREAR CORAZONES
+   ================================== */
+
+function crearCorazones() {
+
+    const contenedor =
+        document.getElementById("hearts");
+
+
+    for (
+        let i = 0;
+        i < 24;
+        i++
+    ) {
+
+        const corazon =
+            document.createElement("div");
+
+
+        corazon.className =
+            "heart";
+
+
+        corazon.textContent =
+            Math.random() > 0.5
+            ? "♥"
+            : "♡";
+
+
+        corazon.style.left =
+            Math.random() * 100 + "vw";
+
+
+        corazon.style.fontSize =
+            12 +
+            Math.random() * 25 +
+            "px";
+
+
+        corazon.style.animationDuration =
+            5 +
+            Math.random() * 8 +
+            "s";
+
+
+        corazon.style.animationDelay =
+            -Math.random() * 10 +
+            "s";
+
+
+        contenedor.appendChild(
+            corazon
+        );
+
+    }
+
+}
+
+
+crearCorazones();
+
+
+
+/* ==================================
+   VARIABLES DEL JUEGO
+   ================================== */
+
+let murcielagoX = 50;
+
+let murcielagoY = 50;
+
+let toques = 0;
+
+let juegoActivo = false;
+
+
+
+/* ==================================
+   MOVER MURCIÉLAGO
+   ================================== */
+
+function moverMurcielago() {
+
+    if (!juegoActivo)
+        return;
+
+
+    const murcielago =
+        document.getElementById("bat");
+
+
+    const ancho =
+        window.innerWidth;
+
+
+    const alto =
+        window.innerHeight;
+
+
+    const anchoBat =
+        murcielago.offsetWidth;
+
+
+    const altoBat =
+        murcielago.offsetHeight;
+
+
+    const espacio = 10;
+
+
+    murcielagoX =
+        espacio +
+        Math.random() *
+        Math.max(
+            1,
+            ancho -
+            anchoBat -
+            espacio * 2
+        );
+
+
+    murcielagoY =
+        70 +
+        Math.random() *
+        Math.max(
+            1,
+            alto -
+            altoBat -
+            90
+        );
+
+
+    murcielago.style.left =
+        murcielagoX + "px";
+
+
+    murcielago.style.top =
+        murcielagoY + "px";
+
+
+    murcielago.style.transform =
+        `rotate(${Math.random() * 20 - 10}deg)`;
+
+}
+
+
+
+/* ==================================
+   BOTÓN "ESTOY LISTO/A"
+   ================================== */
+
+document
+    .getElementById("startBtn")
+    .onclick = function() {
+
+
+        mostrarPantalla(
+            "countdown"
+        );
+
+
+        let numero = 3;
+
+
+        document
+            .getElementById("count")
+            .textContent = numero;
+
+
+        const contador =
+            setInterval(
+                function() {
+
+
+                    numero--;
+
+
+                    if (numero > 0) {
+
+                        document
+                            .getElementById("count")
+                            .textContent =
+                            numero;
+
+                    }
+
+
+                    else {
+
+                        clearInterval(
+                            contador
+                        );
+
+
+                        mostrarPantalla(
+                            "vamos"
+                        );
+
+
+                        setTimeout(
+                            function() {
+
+                                mostrarPantalla(
+                                    "game"
+                                );
+
+
+                                juegoActivo =
+                                    true;
+
+
+                                moverMurcielago();
+
+                            },
+                            850
+                        );
+
+                    }
+
+                },
+                800
+            );
+
+    };
+
+
+
+/* ==================================
+   ATRAPAR AL MURCIÉLAGO
+   ================================== */
+
+document
+    .getElementById("bat")
+    .addEventListener(
+        "pointerdown",
+        function(event) {
+
+
+            event.preventDefault();
+
+
+            if (!juegoActivo)
+                return;
+
+
+            juegoActivo =
+                false;
+
+
+            document
+                .getElementById("bat")
+                .style.display =
+                "none";
+
+
+            mostrarPantalla(
+                "win"
+            );
+
+        }
+    );
+
+
+
+/* ==================================
+   EL MURCIÉLAGO CAMBIA DE POSICIÓN
+   ================================== */
+
+setInterval(
+    function() {
+
+        if (juegoActivo) {
+
+            moverMurcielago();
+
+        }
+
+    },
+
+    650
+);
+
+
+
+/* ==================================
+   AJUSTAR AL CAMBIAR EL TAMAÑO
+   ================================== */
+
+window.addEventListener(
+    "resize",
+    function() {
+
+        if (juegoActivo) {
+
+            moverMurcielago();
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>
